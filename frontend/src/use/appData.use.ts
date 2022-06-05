@@ -34,7 +34,10 @@ export const useAppData = function () {
             value: readonly(albums),
 
             async add(request: ICreateAlbumRequest): Promise<IAlbum> {
-                const result = await albumsApiClient.createAlbum(request);
+                if (authLoginToken.value === null)
+                    throw new Error('Login token of an admin user is required for this request.');
+
+                const result = await albumsApiClient.createAlbum(request, authLoginToken.value);
 
                 albums.value?.push(result);
 
@@ -44,7 +47,10 @@ export const useAppData = function () {
 
         photos: {
             async add(albumId: number, request: IUploadPhotoRequest): Promise<IPhoto> {
-                const result = await albumsApiClient.uploadPhoto(albumId, request);
+                if (authLoginToken.value === null)
+                    throw new Error('Login token of an admin user is required for this request.');
+
+                const result = await albumsApiClient.uploadPhoto(albumId, request, authLoginToken.value);
 
                 const album = albums.value?.find(x => x.id == albumId);
                 album?.photos.push(result);
@@ -53,7 +59,10 @@ export const useAppData = function () {
             },
 
             async delete(albumId: number, photoId: number): Promise<void> {
-                const result = await albumsApiClient.deletePhoto(albumId, photoId);
+                if (authLoginToken.value === null)
+                    throw new Error('Login token of an admin user is required for this request.');
+
+                const result = await albumsApiClient.deletePhoto(albumId, photoId, authLoginToken.value);
 
                 const album = albums.value?.find(x => x.id == albumId);
                 if (!album)
@@ -63,9 +72,14 @@ export const useAppData = function () {
             },
 
             async reorder(albumId: number, photos: Record<number, number>): Promise<void> {
-                const reorderPhotosResult = await albumsApiClient.reorderPhotos(albumId, {
+                if (authLoginToken.value === null)
+                    throw new Error('Login token of an admin user is required for this request.');
+
+                const request = {
                     photos,
-                });
+                };
+
+                const reorderPhotosResult = await albumsApiClient.reorderPhotos(albumId, request, authLoginToken.value);
 
                 const getAlbumsResult = await albumsApiClient.getAlbums();
                 albums.value = getAlbumsResult;

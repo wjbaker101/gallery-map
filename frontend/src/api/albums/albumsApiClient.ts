@@ -31,9 +31,13 @@ export const albumsApiClient = {
         }));
     },
 
-    async createAlbum(request: ICreateAlbumRequest): Promise<IAlbum> {
+    async createAlbum(request: ICreateAlbumRequest, loginToken: string): Promise<IAlbum> {
         const response = await apiClient
-            .post<IApiResponse<ICreateAlbumResponse>>('/album', request);
+            .post<IApiResponse<ICreateAlbumResponse>>('/album', request, {
+                headers: {
+                    'Authorization': `Bearer ${loginToken}`,
+                },
+            });
 
         const album = response.data.result.album;
 
@@ -52,7 +56,7 @@ export const albumsApiClient = {
         };
     },
 
-    async uploadPhoto(albumId: number, request: IUploadPhotoRequest): Promise<IPhoto> {
+    async uploadPhoto(albumId: number, request: IUploadPhotoRequest, loginToken: string): Promise<IPhoto> {
         const formData = new FormData();
         for (const [ key, value ] of Object.entries(request)) {
             formData.append(key, value);
@@ -62,6 +66,7 @@ export const albumsApiClient = {
             .post<IApiResponse<IUploadPhotoResponse>>(`/album/${albumId}/photo`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${loginToken}`,
                 },
             });
 
@@ -78,13 +83,21 @@ export const albumsApiClient = {
         };
     },
 
-    async deletePhoto(albumId: number, photoId: number): Promise<void> {
+    async deletePhoto(albumId: number, photoId: number, loginToken: string): Promise<void> {
         const response = await apiClient
-            .delete<IApiResponse<void>>(`/album/${albumId}/photo/${photoId}`);
+            .delete<IApiResponse<void>>(`/album/${albumId}/photo/${photoId}`, {
+                headers: {
+                    'Authorization': `Bearer ${loginToken}`,
+                },
+            });
     },
 
-    async reorderPhotos(albumId: number, request: IReorderPhotosRequest): Promise<void> {
+    async reorderPhotos(albumId: number, request: IReorderPhotosRequest, loginToken: string): Promise<void> {
         const response = await apiClient
-            .put<IApiResponse<void>>(`/album/${albumId}/photos/reorder`, request);
+            .put<IApiResponse<void>>(`/album/${albumId}/photos/reorder`, request, {
+                headers: {
+                    'Authorization': `Bearer ${loginToken}`,
+                },
+            });
     },
 };
