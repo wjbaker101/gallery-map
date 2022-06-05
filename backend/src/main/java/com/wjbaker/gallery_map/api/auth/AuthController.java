@@ -21,6 +21,7 @@ public final class AuthController {
     }
 
     @PostMapping("/user")
+    @RequiresAdmin
     public ApiResponse<Void> createUser(@RequestBody final CreateUserRequest request) {
         var result = this.authService.createUser(request);
         return ApiResponse.FromResult(result);

@@ -1,5 +1,6 @@
 package com.wjbaker.gallery_map.api.photos;
 
+import com.wjbaker.gallery_map.api.auth.RequiresAdmin;
 import com.wjbaker.gallery_map.api.photos.type.CreatePhotoRequest;
 import com.wjbaker.gallery_map.api.photos.type.CreatePhotoResponse;
 import com.wjbaker.gallery_map.api.photos.type.ReorderPhotosRequest;
@@ -19,6 +20,7 @@ public final class PhotosController {
     }
 
     @PostMapping("/photo")
+    @RequiresAdmin
     public ApiResponse<CreatePhotoResponse> createPhoto(
         @PathVariable final long albumId,
         @RequestParam("title") final String title,
@@ -33,12 +35,14 @@ public final class PhotosController {
     }
 
     @DeleteMapping("/photo/{photoId}")
+    @RequiresAdmin
     public ApiResponse<Void> deletePhoto(@PathVariable final long albumId, @PathVariable final long photoId) {
         var result = this.photosService.deletePhoto(albumId, photoId);
         return ApiResponse.FromResult(result);
     }
 
     @PutMapping("/photos/reorder")
+    @RequiresAdmin
     public ApiResponse<Void> reorderPhotos(
         @PathVariable final long albumId,
         @RequestBody final ReorderPhotosRequest request) {

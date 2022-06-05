@@ -1,6 +1,7 @@
 package com.wjbaker.gallery_map.api.albums;
 
 import com.wjbaker.gallery_map.api.albums.type.*;
+import com.wjbaker.gallery_map.api.auth.RequiresAdmin;
 import com.wjbaker.gallery_map.type.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,14 @@ public final class AlbumsController {
     }
 
     @PostMapping("/album")
+    @RequiresAdmin
     public ApiResponse<CreateAlbumResponse> createAlbum(@RequestBody final CreateAlbumRequest request) {
         var result = this.albumsService.createAlbum(request);
         return ApiResponse.FromResult(result);
     }
 
     @PutMapping("/album/{id}")
+    @RequiresAdmin
     public ApiResponse<UpdateAlbumResponse> updateAlbum(
         @PathVariable final long id,
         @RequestBody final UpdateAlbumRequest request) {
@@ -37,6 +40,7 @@ public final class AlbumsController {
     }
 
     @DeleteMapping("/album/{id}")
+    @RequiresAdmin
     public ApiResponse<Void> deleteAlbum(@PathVariable final long id) {
         var result = this.albumsService.deleteAlbum(id);
         return ApiResponse.FromResult(result);
