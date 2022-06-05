@@ -6,12 +6,14 @@ import com.wjbaker.gallery_map.api.albums.type.*;
 import com.wjbaker.gallery_map.core.result.Result;
 import com.wjbaker.gallery_map.core.result.ResultOf;
 import com.wjbaker.gallery_map.database.entity.AlbumEntity;
+import com.wjbaker.gallery_map.database.entity.PhotoEntity;
 import com.wjbaker.gallery_map.database.repository.IAlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 @Service
 public final class AlbumsService {
@@ -29,15 +31,19 @@ public final class AlbumsService {
             album.getId(),
             album.getTitle(),
             album.getCreatedAt(),
-            album.getPhotos().stream().map(photo -> new PhotoModel(
-                photo.getId(),
-                photo.getTitle(),
-                photo.getUrl(),
-                photo.getThumbnailUrl(),
-                photo.getLongitude(),
-                photo.getLatitude(),
-                photo.getCreatedAt()
-            )).toList()
+            album.getPhotos()
+                .stream()
+                .sorted(Comparator.comparingInt(PhotoEntity::getListOrder))
+                .map(photo -> new PhotoModel(
+                    photo.getId(),
+                    photo.getTitle(),
+                    photo.getUrl(),
+                    photo.getThumbnailUrl(),
+                    photo.getLongitude(),
+                    photo.getLatitude(),
+                    photo.getCreatedAt()
+                ))
+                .toList()
         )).toList()));
     }
 
