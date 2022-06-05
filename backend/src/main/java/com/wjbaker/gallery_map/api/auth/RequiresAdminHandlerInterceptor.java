@@ -48,7 +48,11 @@ public final class RequiresAdminHandlerInterceptor implements HandlerInterceptor
         if (userOptional.isEmpty())
             return failure(response);
 
-        request.setAttribute("user", userOptional.get());
+        var user = userOptional.get();
+        if (!user.isAdmin())
+            return failure(response);
+
+        request.setAttribute("user", user);
 
         return true;
     }
