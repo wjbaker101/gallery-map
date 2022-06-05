@@ -1,6 +1,5 @@
 package com.wjbaker.gallery_map.client.cloudinary.type;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public final record GetResourcesResponse(
