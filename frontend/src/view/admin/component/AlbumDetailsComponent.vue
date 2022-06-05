@@ -8,7 +8,7 @@
             <div>{{ album.title }}</div>
             <div class="flex-auto">({{ album.photos.length }})</div>
         </summary>
-        <VueDraggable class="photos-container flex gap-small" tag="div" v-model="album.photos" item-key="id">
+        <VueDraggable class="photos-container flex gap-small" tag="div" v-model="displayPhotos" item-key="id">
             <template #header>
                 <div class="add-photo photo-container flex-auto flex align-items-center" @click="onAddPhoto(album)">
                     <div class="flex-auto text-centered">+<br>Photo</div>
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import VueDraggable from 'vuedraggable';
 
 import { useAppData } from '@/use/appData.use';
@@ -48,11 +48,29 @@ export default defineComponent({
         VueDraggable,
     },
 
-    setup() {
+    setup(props) {
         const appData = useAppData();
         const events = useEvents();
 
+        const displayPhotos = computed({
+            get() {
+                return props.album.photos;
+            },
+            async set(value: Array<IPhoto>) {
+                const request: Record<number, number> = {};
+                let index = 1;
+
+                for (const key of value) {
+                    request[key.id] = index++;
+                }
+
+                appData.photos.reorder(props.album.id, request);
+            },
+        });
+
         return {
+            displayPhotos,
+
             onAddPhoto(album: IAlbum) {
                 events.publish('show-modal', {
                     name: 'new-photo',
