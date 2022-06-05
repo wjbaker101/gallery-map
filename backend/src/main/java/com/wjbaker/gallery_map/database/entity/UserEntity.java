@@ -34,4 +34,8 @@ public final class UserEntity {
     @Getter
     @Column(name = "created_at")
     private Instant createdAt;
+
+    @Getter
+    @Column(name = "is_admin")
+    private boolean isAdmin;
 }

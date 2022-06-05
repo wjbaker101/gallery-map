@@ -42,7 +42,8 @@ public final class AuthService {
             request.username(),
             generatedPassword.getFirst(),
             generatedPassword.getSecond(),
-            Instant.now()
+            Instant.now(),
+            false
         ));
 
         return Result.success();
