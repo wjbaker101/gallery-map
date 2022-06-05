@@ -1,5 +1,8 @@
 import { readonly, ref } from 'vue';
 
+import { authApiClient } from '@/api/auth/authApiClient';
+import { ILogInRequest } from '@/api/auth/type/LogIn.type';
+
 import { IAlbum } from '@/model/album.model';
 import { albumsApiClient } from '@/api/albums/albumsApiClient';
 import { ICreateAlbumRequest } from '@/api/albums/type/CreateAlbum.type';
@@ -13,8 +16,19 @@ const albums = ref<Array<IAlbum> | null>(null);
     albums.value = result;
 })();
 
+const authLoginToken = ref<string | null>(null);
+
 export const useAppData = function () {
     return {
+
+        auth: {
+            loginToken: readonly(authLoginToken),
+
+            async logIn(request: ILogInRequest): Promise<void> {
+                const result = await authApiClient.logIn(request);
+                authLoginToken.value = result;
+            },
+        },
 
         albums: {
             value: readonly(albums),

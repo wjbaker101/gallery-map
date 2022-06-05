@@ -5,7 +5,7 @@ import { ILogInRequest, ILogInResponse } from '@/api/auth/type/LogIn.type';
 
 export const authApiClient = {
 
-    async login(request: ILogInRequest): Promise<string> {
+    async logIn(request: ILogInRequest): Promise<string> {
         const response = await apiClient
             .post<IApiResponse<ILogInResponse>>('/auth/login', request);
 
