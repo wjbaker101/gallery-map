@@ -1,0 +1,34 @@
+{
+    "name": "gallery-map",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "co:login": "aws codeartifact login --tool npm --repository npm-libs --domain wjb --domain-owner 144953083930",
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build"
+    },
+    "dependencies": {
+        "@wjb/styling": "^1.0.3",
+        "@wjb/vue": "^1.0.0",
+        "axios": "^0.27.2",
+        "mapbox-gl": "^2.8.2",
+        "vue": "^3.0.0",
+        "vue-router": "4",
+        "vuedraggable": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/mapbox-gl": "^2.7.2",
+        "@vue/cli-plugin-babel": "^5.0.4",
+        "@vue/cli-plugin-typescript": "~5.0.4",
+        "@vue/cli-service": "~5.0.4",
+        "@vue/compiler-sfc": "^3.0.0",
+        "sass": "^1.52.2",
+        "sass-loader": "^13.0.0",
+        "typescript": "~4.7.3"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}
