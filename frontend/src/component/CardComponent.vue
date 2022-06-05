@@ -12,7 +12,7 @@ export default defineComponent({
 
     props: {
         location: {
-            type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'none'>,
+            type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'middle' | 'none'>,
             required: false,
             default: 'top-left',
         },
@@ -41,6 +41,12 @@ export default defineComponent({
     @include vars.shadow-large;
 
     $offset: 1rem;
+
+    &.middle {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
     &.top-left {
         top: $offset;
