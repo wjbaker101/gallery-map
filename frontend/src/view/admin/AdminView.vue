@@ -14,7 +14,7 @@
                 <div>{{ album.title }}</div>
                 <div class="flex-auto">({{ album.photos.length }})</div>
             </summary>
-            <!-- <div class="photos-container flex gap-small">
+            <div class="photos-container flex gap-small">
                 <div class="add-photo photo-container flex-auto flex align-items-center" @click="onAddPhoto(album)">
                     <div class="flex-auto text-centered">+<br>Photo</div>
                 </div>
@@ -22,25 +22,13 @@
                     <img :src="photo.thumbnailUrl">
                     <DeleteButtonComponent class="delete" onlyIcon @delete="onDeletePhoto(album, photo)" />
                 </div>
-            </div> -->
-            <VueDraggable tag="div" class="photos-container flex gap-small" v-model="album.photos" group="photos" item-key="id">
-                <template #header>
-                    <div class="add-photo photo-container flex-auto flex align-items-center" @click="onAddPhoto(album)">
-                        <div class="flex-auto text-centered">+<br>Photo</div>
-                    </div>
-                </template>
-                <template #item="{element}">
-                    <img :src="element.thumbnailUrl">
-                    <DeleteButtonComponent class="delete" onlyIcon @delete="onDeletePhoto(album, element)" />
-                </template>
-            </VueDraggable>
+            </div>
         </details>
     </CardComponent>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import VueDraggable from 'vuedraggable';
 
 import CardComponent from '@/component/CardComponent.vue';
 
@@ -54,7 +42,6 @@ export default defineComponent({
     name: 'AdminView',
 
     components: {
-        VueDraggable,
         CardComponent,
     },
 
