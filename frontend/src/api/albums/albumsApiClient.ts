@@ -2,11 +2,12 @@ import { apiClient } from '@/api/apiClient';
 import { IApiResponse } from '@/api/ApiResponse.type';
 
 import { IAlbum } from '@/model/album.model';
+import { IPhoto } from '@/model/photo.model';
+
 import { IGetAlbumsResponse } from '@/api/albums/type/GetAlbums.type';
 import { ICreateAlbumRequest, ICreateAlbumResponse } from '@/api/albums/type/CreateAlbum.type';
-import { IUploadPhotoRequest, IUploadPhotoResponse } from './type/UploadPhoto.type';
-import { IPhoto } from '@/model/photo.model';
-import { IReorderPhotosRequest } from './type/ReorderPhotos.type';
+import { IUploadPhotoRequest, IUploadPhotoResponse } from '@/api/albums/type/UploadPhoto.type';
+import { IReorderPhotosRequest } from '@/api/albums/type/ReorderPhotos.type';
 
 export const albumsApiClient = {
 
@@ -54,6 +55,15 @@ export const albumsApiClient = {
                 latitude: photo.latitude,
             })),
         };
+    },
+
+    async deleteAlbum(id: number, loginToken: string): Promise<void> {
+        const response = await apiClient
+            .delete<IApiResponse<ICreateAlbumResponse>>(`/album/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${loginToken}`,
+                },
+            });
     },
 
     async uploadPhoto(albumId: number, request: IUploadPhotoRequest, loginToken: string): Promise<IPhoto> {

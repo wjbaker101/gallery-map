@@ -1,12 +1,15 @@
 <template>
     <details class="album-details">
-        <summary class="flex gap">
+        <summary class="flex gap align-items-center">
             <div class="flex-auto">
                 <IconComponent class="open" icon="arrow-triangle-right" />
                 <IconComponent class="closed" icon="arrow-triangle-down" />
             </div>
             <div>{{ album.title }}</div>
             <div class="flex-auto">({{ album.photos.length }})</div>
+            <div class="flex-auto">
+                <DeleteButtonComponent class="delete-album" onlyIcon @delete="onDeleteAlbum(album)" />
+            </div>
         </summary>
         <VueDraggable class="photos-container flex gap-small" tag="div" v-model="displayPhotos" item-key="id">
             <template #header>
@@ -17,7 +20,7 @@
             <template #item="{element}">
                 <div class="photo-container flex-auto">
                     <img :src="element.thumbnailUrl">
-                    <DeleteButtonComponent class="delete" onlyIcon @delete="onDeletePhoto(album, element)" />
+                    <DeleteButtonComponent class="delete-photo" onlyIcon @delete="onDeletePhoto(album, element)" />
                 </div>
             </template>
         </VueDraggable>
@@ -78,6 +81,10 @@ export default defineComponent({
                         album,
                     },
                 });
+            },
+
+            async onDeleteAlbum(album: IAlbum) {
+                await appData.albums.delete(album.id);
             },
 
             async onDeletePhoto(album: IAlbum, photo: IPhoto) {
@@ -148,7 +155,7 @@ export default defineComponent({
             border: $border-width dashed #176bc0;
         }
 
-        .delete {
+        .delete-photo {
             position: absolute;
             bottom: 0.5rem;
             right: 0.5rem;

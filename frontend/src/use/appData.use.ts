@@ -7,8 +7,8 @@ import { IAlbum } from '@/model/album.model';
 import { albumsApiClient } from '@/api/albums/albumsApiClient';
 import { ICreateAlbumRequest } from '@/api/albums/type/CreateAlbum.type';
 
-import { IUploadPhotoRequest } from '@/api/albums/type/UploadPhoto.type';
 import { IPhoto } from '@/model/photo.model';
+import { IUploadPhotoRequest } from '@/api/albums/type/UploadPhoto.type';
 
 const albums = ref<Array<IAlbum> | null>(null);
 (async () => {
@@ -42,6 +42,15 @@ export const useAppData = function () {
                 albums.value?.push(result);
 
                 return result;
+            },
+
+            async delete(id: number) {
+                if (authLoginToken.value === null)
+                    throw new Error('Login token of an admin user is required for this request.');
+
+                const result = await albumsApiClient.deleteAlbum(id, authLoginToken.value);
+
+                albums.value = albums.value?.filter(x => x.id !== id) ?? null;
             },
         },
 
