@@ -17,7 +17,6 @@ import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -41,14 +40,13 @@ public final class PhotosService {
 
     public ResultOf<CreatePhotoResponse> createPhoto(
         final long albumId,
-        final CreatePhotoRequest request,
-        final MultipartFile file) throws Exception {
+        final CreatePhotoRequest request) throws Exception {
 
         var albumOptional = this.albumRepository.findById(albumId);
         if (albumOptional.isEmpty())
             return ResultOf.failure(String.format("Unable to find album with id: %d.", albumId));
 
-        var fileAsBytes = file.getBytes();
+        var fileAsBytes = request.file().getBytes();
         var gps = getGpsFromImage(fileAsBytes);
 
         var photo = this.photoRepository.save(new PhotoEntity(

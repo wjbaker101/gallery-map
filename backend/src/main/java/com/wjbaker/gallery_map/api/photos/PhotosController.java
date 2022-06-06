@@ -27,10 +27,11 @@ public final class PhotosController {
         @RequestParam("file") final MultipartFile file) throws Exception {
 
         var request = new CreatePhotoRequest(
-            title
+            title,
+            file
         );
 
-        var result = this.photosService.createPhoto(albumId, request, file);
+        var result = this.photosService.createPhoto(albumId, request);
         return ApiResponse.FromResult(result);
     }
 
