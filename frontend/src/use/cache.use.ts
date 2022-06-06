@@ -3,7 +3,7 @@ interface ICacheItem<T> {
     expiresAt: number;
 }
 
-export type CacheKey = '';
+type CacheKey = 'auth-login-token';
 
 export const useCache = function () {
     return {

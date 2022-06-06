@@ -1,5 +1,7 @@
 import { readonly, ref } from 'vue';
 
+import { useCache } from '@/use/cache.use';
+
 import { authApiClient } from '@/api/auth/authApiClient';
 import { ILogInRequest } from '@/api/auth/type/LogIn.type';
 
@@ -10,13 +12,15 @@ import { ICreateAlbumRequest } from '@/api/albums/type/CreateAlbum.type';
 import { IPhoto } from '@/model/photo.model';
 import { IUploadPhotoRequest } from '@/api/albums/type/UploadPhoto.type';
 
+const cache = useCache();
+
 const albums = ref<Array<IAlbum> | null>(null);
 (async () => {
     const result = await albumsApiClient.getAlbums();
     albums.value = result;
 })();
 
-const authLoginToken = ref<string | null>(null);
+const authLoginToken = ref<string | null>(cache.get<string>('auth-login-token'));
 
 export const useAppData = function () {
     return {
@@ -27,6 +31,13 @@ export const useAppData = function () {
             async logIn(request: ILogInRequest): Promise<void> {
                 const result = await authApiClient.logIn(request);
                 authLoginToken.value = result;
+
+                cache.set('auth-login-token', authLoginToken.value, 2 * 24 * 60 * 60 * 1000);
+            },
+
+            logOut() {
+                authLoginToken.value = null;
+                cache.unset('auth-login-token');
             },
         },
 
