@@ -4,15 +4,15 @@
             <h2>Login</h2>
             <label>
                 <strong>Username</strong>
-                <input type="text">
+                <input type="text" v-model="username">
             </label>
             <br>
             <label>
                 <strong>Password</strong>
-                <input type="password">
+                <input type="password" v-model="password">
             </label>
             <p></p>
-            <ButtonComponent class="primary">
+            <ButtonComponent class="primary" @click="onLogIn">
                 Log In
             </ButtonComponent>
         </CardComponent>
@@ -20,13 +20,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { useAppData } from '@/use/appData.use';
 
 export default defineComponent({
     name: 'LoginView',
 
     setup() {
-        return {};
+        const appData = useAppData();
+        const router = useRouter();
+
+        const username = ref<string>('');
+        const password = ref<string>('');
+
+        return {
+            username,
+            password,
+
+            async onLogIn() {
+                await appData.auth.logIn({
+                    username: username.value,
+                    password: password.value,
+                });
+
+                router.push({
+                    path: '/admin',
+                });
+            },
+        };
     },
 });
 </script>
