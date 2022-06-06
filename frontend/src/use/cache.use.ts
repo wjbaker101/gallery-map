@@ -3,9 +3,11 @@ interface ICacheItem<T> {
     expiresAt: number;
 }
 
+export type CacheKey = '';
+
 export const useCache = function () {
     return {
-        get<T>(key: string): T | null {
+        get<T>(key: CacheKey): T | null {
             const cache = localStorage.getItem(key);
             if (cache === null)
                 return null;
@@ -18,7 +20,7 @@ export const useCache = function () {
             return item.item;
         },
 
-        set(key: string, data: any, expiresIn: number = 0): void {
+        set(key: CacheKey, data: any, expiresIn: number = 0): void {
             const item: ICacheItem<any> = {
                 item: data,
                 expiresAt: Date.now() + expiresIn,
@@ -27,7 +29,7 @@ export const useCache = function () {
             localStorage.setItem(key, JSON.stringify(item));
         },
 
-        unset(key: string): void {
+        unset(key: CacheKey): void {
             localStorage.removeItem(key);
         },
     };
